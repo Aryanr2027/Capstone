@@ -50,3 +50,39 @@ try:
 except KeyboardInterrupt:
     print("Measurement stopped by User")
     GPIO.cleanup()
+
+
+
+
+
+
+
+import RPi.GPIO as GPIO
+import time
+
+# Use GPIO numbering
+GPIO.setmode(GPIO.BCM)
+
+# Define the pin number for the sensor's output
+sensor_pin = 17
+
+# Set up the sensor pin as an input
+GPIO.setup(sensor_pin, GPIO.IN)
+
+try:
+    while True:
+        # Read from the sensor
+        if GPIO.input(sensor_pin) == 0:
+            print("Obstacle detected!")
+        else:
+            print("Path is clear.")
+        
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("Program exited by user")
+
+finally:
+    # Clean up the GPIO pins to reset them back to input mode
+    GPIO.cleanup()
+
