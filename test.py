@@ -86,3 +86,46 @@ finally:
     # Clean up the GPIO pins to reset them back to input mode
     GPIO.cleanup()
 
+
+
+
+
+
+
+
+import RPi.GPIO as GPIO
+import time
+
+# Use GPIO numbering
+GPIO.setmode(GPIO.BCM)
+
+# Define the pin numbers for the sensors' outputs
+sensors = {
+    'Sensor 1': 17,
+    'Sensor 2': 27,
+    'Sensor 3': 22,
+    'Sensor 4': 23
+}
+
+# Set up each sensor pin as an input
+for sensor, pin in sensors.items():
+    GPIO.setup(pin, GPIO.IN)
+
+def check_obstacles():
+    for sensor, pin in sensors.items():
+        if GPIO.input(pin) == 0:  # Obstacle detected
+            print(f"{sensor} detected an obstacle!")
+        else:
+            print(f"{sensor} path is clear.")
+
+try:
+    while True:
+        check_obstacles()
+        time.sleep(1)  # Adjust the sleep time as needed
+
+except KeyboardInterrupt:
+    print("Program exited by user")
+
+finally:
+    GPIO.cleanup()  # Reset the GPIO pins to their default state
+
