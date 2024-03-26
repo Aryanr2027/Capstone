@@ -1,0 +1,4 @@
+Primary key: NHqS4bJWQ2+DFfgNcwo7k7IFYMk9vIpvpAIoTEkaqn8=
+Secondary key: NaZYyVVTzw9lAzgWWpfzXnXts4BiuvasaAIoTFLHEsY=
+Primary Con string: HostName=CPIN1021.azure-devices.net;DeviceId=Node-RED;SharedAccessKey=NHqS4bJWQ2+DFfgNcwo7k7IFYMk9vIpvpAIoTEkaqn8=
+Secondary Con string: HostName=CPIN1021.azure-devices.net;DeviceId=Node-RED;SharedAccessKey=NaZYyVVTzw9lAzgWWpfzXnXts4BiuvasaAIoTFLHEsY=
