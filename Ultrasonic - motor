@@ -79,7 +79,7 @@ try:
         print("Distance from Ultrasonic Sensor 2:", distance2, "cm")
         
         # If both ultrasonic sensors detect an obstacle, open the gate
-        if distance1 < 10 and distance2 < 10:
+        if distance1 < 10 or distance2 < 10:
             print("Opening the gate...")
             open_gate()
             time.sleep(2)  # Assuming the gate needs 2 seconds to open fully
