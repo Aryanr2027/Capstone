@@ -64,18 +64,15 @@ def open_gate():
     # Assuming gate opens from 0 to 180 degrees
     servo_pwm.start(0)
     duty_cycle = 4  # Duty cycle for 90 degrees
-    servo_pwm.start(duty_cycle)
+    servo_pwm.ChangeDutyCycle(duty_cycle)
     time.sleep(3)
     close_gate()
-    servo_pwm.stop()
     
 def close_gate():
     # Assuming gate opens from 0 to 180 degrees
-    servo_pwm.start(0)
     duty_cycle = 9 # Duty cycle for 90 degrees
     servo_pwm.ChangeDutyCycle(duty_cycle)
     time.sleep(1)
-    servo_pwm.stop()
 
 try:
     while True:
@@ -100,4 +97,5 @@ except KeyboardInterrupt:
     print("Program exited by user")
 
 finally:
+    servo_pwm.stop()
     GPIO.cleanup()  # Reset the GPIO pins to their default state
