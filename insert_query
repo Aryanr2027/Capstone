@@ -3,6 +3,8 @@ SELECT
     CASE WHEN IR_sensor_2 = 'gpio/27' THEN 1 ELSE 0 END AS IR_sensor_2,
     CASE WHEN IR_sensor_3 = 'gpio/22' THEN 1 ELSE 0 END AS IR_sensor_3,
     CASE WHEN IR_sensor_4 = 'gpio/23' THEN 1 ELSE 0 END AS IR_sensor_4,
+    CASE WHEN ultrasonic_sensor1_distance < 10 THEN 1 ELSE 0 END AS ultrasonic_sensor1,
+    CASE WHEN ultrasonic_sensor2_distance < 10 THEN 1 ELSE 0 END AS ultrasonic_sensor2,
     timestamp AS timestamp
 INTO
     [Cars]
