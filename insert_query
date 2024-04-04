@@ -1,0 +1,10 @@
+SELECT
+    CASE WHEN IR_sensor_1 = 'gpio/17' THEN 1 ELSE 0 END AS IR_sensor_1,
+    CASE WHEN IR_sensor_2 = 'gpio/27' THEN 1 ELSE 0 END AS IR_sensor_2,
+    CASE WHEN IR_sensor_3 = 'gpio/22' THEN 1 ELSE 0 END AS IR_sensor_3,
+    CASE WHEN IR_sensor_4 = 'gpio/23' THEN 1 ELSE 0 END AS IR_sensor_4,
+    timestamp AS timestamp
+INTO
+    [Cars]
+FROM
+    [CPIN1021]
