@@ -1,0 +1,101 @@
+import RPi.GPIO as GPIO
+import time
+
+# Use GPIO numbering
+GPIO.setmode(GPIO.BCM)
+
+# Define the pin numbers for the sensors' outputs
+sensors = {
+    'IR Sensor 1': 17,
+    'IR Sensor 2': 27,
+    'IR Sensor 3': 22,
+    'IR Sensor 4': 23
+}
+
+# Define pin numbers for ultrasonic sensors and servo motor
+ultrasonic1_trigger = 5
+ultrasonic1_echo = 6
+ultrasonic2_trigger = 13
+ultrasonic2_echo = 19
+servo_pin = 3
+
+# Set up IR sensors as inputs
+for sensor, pin in sensors.items():
+    GPIO.setup(pin, GPIO.IN)
+
+# Set up ultrasonic sensors and servo motor
+GPIO.setup(ultrasonic1_trigger, GPIO.OUT)
+GPIO.setup(ultrasonic1_echo, GPIO.IN)
+GPIO.setup(ultrasonic2_trigger, GPIO.OUT)
+GPIO.setup(ultrasonic2_echo, GPIO.IN)
+GPIO.setup(servo_pin, GPIO.OUT)
+
+# Define servo motor PWM
+servo_pwm = GPIO.PWM(servo_pin, 50)  # 50 Hz PWM frequency
+
+def check_obstacles():
+    for sensor, pin in sensors.items():
+        if GPIO.input(pin) == 0:  # Obstacle detected by IR sensor
+            print(f"{sensor} detected an obstacle!")
+        else:
+            print(f"{sensor} path is clear.")
+
+def measure_distance(trigger_pin, echo_pin):
+    GPIO.output(trigger_pin, True)
+    time.sleep(0.00001)
+    GPIO.output(trigger_pin, False)
+
+    pulse_start = time.time()
+    pulse_end = time.time()
+
+    while GPIO.input(echo_pin) == 0:
+        pulse_start = time.time()
+
+    while GPIO.input(echo_pin) == 1:
+        pulse_end = time.time()
+
+    pulse_duration = pulse_end - pulse_start
+    distance = pulse_duration * 17150  # Speed of sound = 343 m/s, distance = time * speed
+
+    distance = round(distance, 2)
+    return distance
+
+def open_gate():
+    # Assuming gate opens from 0 to 180 degrees
+    servo_pwm.start(0)
+    duty_cycle = 4  # Duty cycle for 90 degrees
+    servo_pwm.ChangeDutyCycle(duty_cycle)
+    time.sleep(3)
+    close_gate()
+    
+def close_gate():
+    # Assuming gate opens from 0 to 180 degrees
+    duty_cycle = 9 # Duty cycle for 90 degrees
+    servo_pwm.ChangeDutyCycle(duty_cycle)
+    time.sleep(1)
+
+try:
+    while True:
+        check_obstacles()
+        
+        # Measure distance from ultrasonic sensors
+        distance1 = measure_distance(ultrasonic1_trigger, ultrasonic1_echo)
+        distance2 = measure_distance(ultrasonic2_trigger, ultrasonic2_echo)
+        
+        print("Distance from Ultrasonic Sensor 1:", distance1, "cm")
+        print("Distance from Ultrasonic Sensor 2:", distance2, "cm")
+        
+        # If both ultrasonic sensors detect an obstacle, open the gate
+        if distance1 < 10 or distance2 < 10:
+            print("Opening the gate...")
+            open_gate()
+            time.sleep(2)  # Assuming the gate needs 2 seconds to open fully
+        
+        time.sleep(1)  # Adjust the sleep time as needed
+
+except KeyboardInterrupt:
+    print("Program exited by user")
+
+finally:
+    servo_pwm.stop()
+    GPIO.cleanup()  # Reset the GPIO pins to their default state
